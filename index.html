@@ -284,10 +284,131 @@
             <a href="https://enull2700.vercel.app/" class="account-link">Go to Account Page</a>
         </div>
     </div>
+<script>
+        document.getElementById('postAdButton').onclick = function() {
+            document.getElementById('adModal').style.display = "block";
+        }
+        
+        document.getElementsByClassName('close')[0].onclick = function() {
+            document.getElementById('adModal').style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('adModal')) {
+                document.getElementById('adModal').style.display = "none";
+            }
+        }
 
-    <!-- Footer -->
+        function postAd() {
+            var adTitle = document.getElementById('adTitle').value;
+            var adDescription = document.getElementById('adDescription').value;
+            var adPrice = document.getElementById('adPrice').value;
+            var adWebsite = document.getElementById('adWebsite').value;
+            var adImage = document.getElementById('adImage').files[0];
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var adDiv = document.createElement('div');
+                adDiv.className = 'ad-content';
+                
+                var adImageDiv = document.createElement('div');
+                adImageDiv.className = 'ad-image';
+                var img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = adTitle;
+                adImageDiv.appendChild(img);
+                
+                var adDescriptionDiv = document.createElement('div');
+                adDescriptionDiv.className = 'ad-description';
+                adDescriptionDiv.innerHTML = 
+                    <h2>${adTitle}</h2>
+                    <p>${adDescription}</p>
+                    <p>Price: ${adPrice}</p>
+                    <p>Website: <a href="${adWebsite}" target="_blank">${adWebsite}</a></p>
+                ;
+                
+                adDiv.appendChild(adImageDiv);
+                adDiv.appendChild(adDescriptionDiv);
+                
+                document.getElementById('ads').appendChild(adDiv);
+                
+                document.getElementById('adModal').style.display = "none";
+                document.getElementById('adForm').reset();
+            };
+            
+            if (adImage) {
+                reader.readAsDataURL(adImage);
+            }
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eNull - Rare Items Marketplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            min-height: 100vh; /* Ensures the body takes up at least the full height of the viewport */
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1; /* Allows the content to grow and take up available space */
+            width: 80%;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        footer {
+            background-color: blue; /* Blue background for footer */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 106%; /* Set the width of the footer */
+            margin: 0 auto; /* Center the footer */
+            position: relative; /* Relative positioning for footer */
+            bottom: 0;
+            left: 0;
+        }
+        footer ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        footer li {
+            margin: 5px 10px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        .footer-text {
+            font-size: 14px;
+        }
+        .trademark {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <!-- Main content goes here -->
+    </div>
     <footer>
         <ul>
+         <a href="https://enull900.vercel.app/">View Listings</a>
+
             <li><a href="https://enull1000.vercel.app/">About eNull</a></li>
             <li><a href="https://enull1000.vercel.app/">Contact eNull</a></li>
             <li><a href="https://enull1000.vercel.app/">Help</a></li>
@@ -311,6 +432,7 @@
             <li><a href="https://enull2200.vercel.app/">10</a></li>
             <li><a href="https://enull2300.vercel.app/">11</a></li>
             <li><a href="https://enull2400.vercel.app/">12</a></li>
+            <li><a href="https://enull2800.vercel.app/">Login</a></li>
         </ul>
         <div class="footer-text">
             &copy; <span id="year"></span> eNull. All rights reserved. Copyrighted.
@@ -323,78 +445,15 @@
     <script>
         // Update the copyright year automatically
         document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Show profile picture dialog on click
-        document.getElementById('profile-pic').addEventListener('click', function() {
-            document.getElementById('profile-dialog').style.display = 'block';
-        });
-
-        // Close dialog function
-        function closeDialog() {
-            document.getElementById('profile-dialog').style.display = 'none';
-        }
-
-        // Handle file input change
-        document.getElementById('file-input').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageUrl = e.target.result;
-                    document.getElementById('profile-pic-img').src = imageUrl;
-                    document.getElementById('dialog-profile-pic').src = imageUrl;
-                    localStorage.setItem('profilePic', imageUrl);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Load profile picture from localStorage if exists
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedImageUrl = localStorage.getItem('profilePic');
-            if (savedImageUrl) {
-                document.getElementById('profile-pic-img').src = savedImageUrl;
-                document.getElementById('dialog-profile-pic').src = savedImageUrl;
-            }
-        });
-
-        // Form submission logic
-        document.getElementById('create-account-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const formData = new FormData(event.target);
-            const email = formData.get('email');
-            const name = formData.get('name');
-            const phone = formData.get('phone');
-            const password = formData.get('password');
-            const retypePassword = formData.get('retype-password');
-            const zip = formData.get('zip');
-            const city = formData.get('city');
-            const notARobot = formData.get('not-a-robot');
-
-            // Perform validation and handle form submission
-            if (password !== retypePassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-
-            // Store account data in localStorage or send it to the server
-            const accountData = {
-                email,
-                name,
-                phone,
-                password,
-                zip,
-                city,
-                notARobot
-            };
-
-            localStorage.setItem('accountData', JSON.stringify(accountData));
-
-            // Redirect to profile page or show a success message
-            document.getElementById('create-account-container').style.display = 'none';
-            document.getElementById('profile-container').style.display = 'flex';
-        });
     </script>
+<script type="text/javascript">
+var infolinks_pid = 3423311;
+var infolinks_wsid = 0 ;
+</script>
+<script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script	
+<script type="text/javascript" src="https://s.skimresources.com/js/268122X1753462.skimlinks.js"></script>
+<body>
+<amp-skimlinks layout="nodisplay" publisher-code="268122X1753462"></amp-skimlinks>
 </body>
 </html>
+  
